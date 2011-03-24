@@ -1,0 +1,9 @@
+SnaggleTooth -- String utilities for batch operations.
+~ Mar. 18, 2010, cleaned and rewritten Mar. 23, 2011
+jsyang.ca@gmail.com
+
+ex: Find all the embedded Javascript code within a page and spit it to code.js
+> tagfinder --key "<script" --head ">" --tail "</script>" sample.html > code.js
+
+ex: Remove all the newlines from sample.html
+> del_newline limerick1 limerick2 > blindedByTheLimericks.txt
