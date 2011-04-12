@@ -48,35 +48,35 @@ void printUsage()
 
 int main( int argc, char* argv[] )
 {
-	FILE *f;
-	
-	// Required option values.
-	char *Key=NULL;    int len_Key=0;
-	char *Head=NULL;   int len_Head=0;
-	char *Tail=NULL;   int len_Tail=0;
+    FILE *f;
+
+    // Required option values.
+    char *Key=NULL;    int len_Key=0;
+    char *Head=NULL;   int len_Head=0;
+    char *Tail=NULL;   int len_Tail=0;
 	
     // Default skips.
     int dhead=0;
     int dtail=0;
     
     // Temps.
-	int i;
+    int i;
 	
-	// A line from a file.
-	char line[LINESIZE]="";
+    // A line from a file.
+    char line[LINESIZE]="";
     char buffer[LINESIZE]="";
-	
-	// Search operations.
-	int j,k;
-	int inTarget=0;            // Are we already printing the target string?
-	                           // If so, skip to finding the TAIL string.
+
+    // Search operations.
+    int j,k;
+    int inTarget=0;            // Are we already printing the target string?
+                               // If so, skip to finding the TAIL string.
 
     // Indices we're reading from, to.
-	char *targetStart=NULL;
+    char *targetStart=NULL;
     char *targetEnd=NULL;
-	
+
     // Syntax message.		
-	if(argc<2)
+    if(argc<2)
     {
         printUsage();
         exit(1);
@@ -119,54 +119,54 @@ int main( int argc, char* argv[] )
             while(fgets(line,LINESIZE,f)!=NULL)
             {
                 // If already printing the target, skip seeking KEY/HEAD.
-        		if(inTarget)
+                if(inTarget)
                 {
                     targetStart=line;
                     goto SKIPKEYHEAD;
                 }
-        		
-        		// Locate the KEY string.        		
-        		for(targetStart=strstr(line,Key);targetStart;)
+                
+                // Locate the KEY string.        		
+                for(targetStart=strstr(line,Key);targetStart;)
                 {       			
-        			// If Head string exists, look for after the "key"
-        			if(Head && strstr(targetStart,Head))
+                    // If Head string exists, look for after the "key"
+                    if(Head && strstr(targetStart,Head))
                     {
-        				targetStart=strstr(targetStart,Head);
-        				
-        				// Skip the first dhead characters before reading target.
-        				targetStart+=len_Head+dhead;
-        			}
+                        targetStart=strstr(targetStart,Head);
+                        
+                        // Skip the first dhead characters before reading target.
+                        targetStart+=len_Head+dhead;
+                    }
                     
                     // Found the target!
-        			inTarget=1;
-        		
-        		////////////
+                    inTarget=1;
+                
+                ////////////
                 SKIPKEYHEAD:
-        						
-        			targetEnd=strstr(targetStart,Tail);
-        			if(targetEnd)
+
+                    targetEnd=strstr(targetStart,Tail);
+                    if(targetEnd)
                     {
                         // Reset our output buffer.
-        				buffer[0]='\0';
-        				// Skip the first dtail characters before ending target.
+                        buffer[0]='\0';
+                        // Skip the first dtail characters before ending target.
                         strncat(buffer,targetStart,strlen(targetStart)-strlen(targetEnd+dtail));
                         
                         // Print our match.
-        				printf("%s\n",buffer);
-        				targetStart=targetEnd+len_Tail;
-        				
-        				// Look for more matches in the same line.
-        				targetStart=strstr(targetStart,Key);
-        				inTarget=0;
-        			}
+                        printf("%s\n",buffer);
+                        targetStart=targetEnd+len_Tail;
+                        
+                        // Look for more matches in the same line.
+                        targetStart=strstr(targetStart,Key);
+                        inTarget=0;
+                    }
                     else
                     {
                         // The rest of the line is considered a match!
-        				printf("%s",targetStart);
-        				targetStart=NULL;
-        			}
-        			
-        		}			
+                        printf("%s",targetStart);
+                        targetStart=NULL;
+                    }
+                    
+                }			
             }
         }
         else
