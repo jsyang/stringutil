@@ -26,10 +26,7 @@ returns: "<center><b>Almighty"
 
 #define LINESIZE 1<<16
 
-void err_( const char *msgfmt, char *msg )
-{
-    fprintf(stderr,msgfmt,msg);
-}
+void err_( const char *msgfmt, char *msg ) { fprintf(stderr,msgfmt,msg); }
 
 void printUsage()
 {
@@ -59,7 +56,6 @@ int main( int argc, char* argv[] )
     int dhead=0;
     int dtail=0;
     
-    // Temps.
     int i;
 	
     // A line from a file.
@@ -76,11 +72,7 @@ int main( int argc, char* argv[] )
     char *targetEnd=NULL;
 
     // Syntax message.		
-    if(argc<2)
-    {
-        printUsage();
-        exit(1);
-    }
+    if(argc<2) { printUsage(); exit(1); }
 		
     // Set up our options.
     for(i=0;++i<argc;)
@@ -114,7 +106,8 @@ int main( int argc, char* argv[] )
     // Read all the files.
     for(;++i<argc;)
     {
-        if(f=fopen(argv[i],"r"))
+        if(!(f=fopen(argv[i],"r"))) { err_("\nCould not load %s!\n",argv[i]); }
+        else
         {
             while(fgets(line,LINESIZE,f)!=NULL)
             {
@@ -164,15 +157,10 @@ int main( int argc, char* argv[] )
                         // The rest of the line is considered a match!
                         printf("%s",targetStart);
                         targetStart=NULL;
-                    }
-                    
+                    }                    
                 }			
             }
         }
-        else
-        {
-            err_("\nCould not load %s!\n",argv[i]);
-        }        
     }
 
 	if(f) fclose(f);
